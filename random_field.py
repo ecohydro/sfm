@@ -13,7 +13,7 @@ from scipy.interpolate import griddata
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from functools import partial
-from Tkinter import *
+from tkinter import *
 
 #########################################
 #
@@ -23,88 +23,91 @@ from Tkinter import *
 
 
 class Params:
-    def __init__(self):
-        """ read in basic constraints on model from file to populate
-        basic model parameter set"""
-        line_input = []
-        input_file = open('params.txt', 'r')
-        for line in input_file:
-            line_input.append(line.split())
-        input_file.close()
-        self.num_extra_seeds = int(line_input[0][1])
-        self.max_pts = int(line_input[1][1])
-        self.r_search = float(line_input[2][1])
-        self.ref_dist = float(line_input[3][1])
-        self.min_value = float(line_input[4][1])
-        self.max_value = float(line_input[5][1])
-        self.exp_gen = float(line_input[6][1])
-        self.epsilon = float(line_input[7][1])
-        self.Interface()
+    def __init__(
+            self,
+            num_extra_seeds=100,
+            max_pts=30000,
+            r_search=25,
+            ref_dist=5,
+            min_value=-3.0,
+            max_value=1.5,
+            exp_gen=2.0,
+            epsilon=1.0
+    ):
+        self.num_extra_seeds = num_extra_seeds
+        self.max_pts = max_pts
+        self.r_search = r_search
+        self.ref_dist = ref_dist
+        self.min_value = min_value
+        self.max_value = max_value
+        self.exp_gen = exp_gen
+        self.epsilon = epsilon
+        # self.Interface()
 
-    def Button_click(self, entry):
-        self.num_extra_seeds = int(entry[0].get())
-        self.max_pts = int(entry[1].get())
-        self.r_search = float(entry[2].get())
-        self.ref_dist = float(entry[3].get())
-        self.min_value = float(entry[4].get())
-        self.max_value = float(entry[5].get())
-        self.exp_gen = float(entry[6].get())
-        self.epsilon = float(entry[7].get())
-        self.WriteParams()
+    # def Button_click(self, entry):
+    #     self.num_extra_seeds = int(entry[0].get())
+    #     self.max_pts = int(entry[1].get())
+    #     self.r_search = float(entry[2].get())
+    #     self.ref_dist = float(entry[3].get())
+    #     self.min_value = float(entry[4].get())
+    #     self.max_value = float(entry[5].get())
+    #     self.exp_gen = float(entry[6].get())
+    #     self.epsilon = float(entry[7].get())
+    #     self.WriteParams()
 
-    def Interface(self):
-        # create a data input window for modifying parameter values
-        root = Tk()
-        container = Frame(root)
-        container.grid()
-        Label(
-            container,
-            text='Model Parameters', font=('Courier', 14)
-        ).grid()
-        labels = [
-            'No. of extra seeds',
-            'Max. no. of spawn points',
-            'Search radius',
-            'Reference distance for spawned points',
-            'Minimum parameter value in domain',
-            'Maximum parameter value in domain',
-            'Inverse distance exponent',
-            'Smoothing distance']
-        param_list = [
-            self.num_extra_seeds,
-            self.max_pts,
-            self.r_search,
-            self.ref_dist,
-            self.min_value,
-            self.max_value,
-            self.exp_gen,
-            self.epsilon
-        ]
-        entry = []
-        for i in xrange(len(labels)):
-            Label(container, text=labels[i]).grid(row=i+1, sticky=W)
-            entry.append(Entry(container))
-            entry[i].grid(row=i+1, column=1)
-            entry[i].insert(0, str(param_list[i]))
-        btn = Button(
-            container,
-            text='UPDATE',
-            command=lambda: self.Button_click(entry)
-        ).grid(column=1)
-        root.mainloop()
+    # def Interface(self):
+    #     # create a data input window for modifying parameter values
+    #     root = Tk()
+    #     container = Frame(root)
+    #     container.grid()
+    #     Label(
+    #         container,
+    #         text='Model Parameters', font=('Courier', 14)
+    #     ).grid()
+    #     labels = [
+    #         'No. of extra seeds',
+    #         'Max. no. of spawn points',
+    #         'Search radius',
+    #         'Reference distance for spawned points',
+    #         'Minimum parameter value in domain',
+    #         'Maximum parameter value in domain',
+    #         'Inverse distance exponent',
+    #         'Smoothing distance']
+    #     param_list = [
+    #         self.num_extra_seeds,
+    #         self.max_pts,
+    #         self.r_search,
+    #         self.ref_dist,
+    #         self.min_value,
+    #         self.max_value,
+    #         self.exp_gen,
+    #         self.epsilon
+    #     ]
+    #     entry = []
+    #     for i in range(len(labels)):
+    #         Label(container, text=labels[i]).grid(row=i+1, sticky=W)
+    #         entry.append(Entry(container))
+    #         entry[i].grid(row=i+1, column=1)
+    #         entry[i].insert(0, str(param_list[i]))
+    #     btn = Button(
+    #         container,
+    #         text='UPDATE',
+    #         command=lambda: self.Button_click(entry)
+    #     ).grid(column=1)
+    #     root.mainloop()
 
-    def WriteParams(self):
-        # write present value set to text file
-        output_file = open('params.txt', 'w')
-        output_file.writelines(['extra_seeds', '\t', str(self.num_extra_seeds), '\n'])  # NOQA
-        output_file.writelines(['max_pts', '\t', str(self.max_pts), '\n'])
-        output_file.writelines(['r_search', '\t', str(self.r_search), '\n'])
-        output_file.writelines(['ref_dist', '\t', str(self.ref_dist), '\n'])
-        output_file.writelines(['min_value', '\t', str(self.min_value), '\n'])
-        output_file.writelines(['max_value', '\t', str(self.max_value), '\n'])
-        output_file.writelines(['exp_gen', '\t', str(self.exp_gen), '\n'])
-        output_file.writelines(['smooth_fct', '\t', str(self.epsilon), '\n'])
-        output_file.close()
+    # def WriteParams(self):
+    #     # write present value set to text file
+    #     output_file = open('params.txt', 'w')
+    #     output_file.writelines(['extra_seeds', '\t', str(self.num_extra_seeds), '\n'])  # NOQA
+    #     output_file.writelines(['max_pts', '\t', str(self.max_pts), '\n'])
+    #     output_file.writelines(['r_search', '\t', str(self.r_search), '\n'])
+    #     output_file.writelines(['ref_dist', '\t', str(self.ref_dist), '\n'])
+    #     output_file.writelines(['min_value', '\t', str(self.min_value), '\n'])  # NOQA
+    #     output_file.writelines(['max_value', '\t', str(self.max_value), '\n'])  # NOQA
+    #     output_file.writelines(['exp_gen', '\t', str(self.exp_gen), '\n'])
+    #     output_file.writelines(['smooth_fct', '\t', str(self.epsilon), '\n'])
+    #     output_file.close()
 
 
 class Grid:
@@ -137,56 +140,56 @@ class Grid:
         ])
         self.slope = array([float(line_input[5][1]), float(line_input[5][2])])
         # introduce interface; opportunity to modify grid parameters
-        root = Tk()
-        container = Frame(root)
-        container.grid()
-        Label(container, text='Grid Attributes', font=('Courier', 14)).grid()
-        column_labels = ['X', 'Y', 'Z']
-        row_labels = ['Start', 'End', 'N', 'Anisotropy (0-1)', 'Slope']
-        for i in xrange(3):
-            Label(
-                container,
-                text=column_labels[i]).grid(row=1, column=i+1, sticky=W)
-        for i in xrange(5):
-            Label(
-                container,
-                text=row_labels[i]).grid(row=i+2, sticky=W)
-        entry_start = []
-        entry_end = []
-        entry_N = []
-        entry_aniso = []
-        entry_slope = []
-        for i in xrange(3):
-            entry_start.append(Entry(container))
-            entry_start[i].grid(row=2, column=i+1)
-            entry_start[i].insert(0, str(self.start[i]))
-        for i in xrange(3):
-            entry_end.append(Entry(container))
-            entry_end[i].grid(row=3, column=i+1)
-            entry_end[i].insert(0, str(self.end[i]))
-        for i in xrange(3):
-            entry_N.append(Entry(container))
-            entry_N[i].grid(row=4, column=i+1)
-            entry_N[i].insert(0, str(self.N[i]))
-        for i in xrange(3):
-            entry_aniso.append(Entry(container))
-            entry_aniso[i].grid(row=5, column=i+1)
-            entry_aniso[i].insert(0, str(self.aniso[i]))
-        for i in xrange(2):
-            entry_slope.append(Entry(container))
-            entry_slope[i].grid(row=6, column=i+1)
-            entry_slope[i].insert(0, str(self.slope[i]))
-        btn = Button(
-            container,
-            text='UPDATE',
-            command=lambda: self.Button_click(
-                entry_start,
-                entry_end,
-                entry_N,
-                entry_aniso,
-                entry_slope)
-            ).grid(column=2)
-        root.mainloop()
+        # root = Tk()
+        # container = Frame(root)
+        # container.grid()
+        # Label(container, text='Grid Attributes', font=('Courier', 14)).grid()
+        # column_labels = ['X', 'Y', 'Z']
+        # row_labels = ['Start', 'End', 'N', 'Anisotropy (0-1)', 'Slope']
+        # for i in range(3):
+        #     Label(
+        #         container,
+        #         text=column_labels[i]).grid(row=1, column=i+1, sticky=W)
+        # for i in range(5):
+        #     Label(
+        #         container,
+        #         text=row_labels[i]).grid(row=i+2, sticky=W)
+        # entry_start = []
+        # entry_end = []
+        # entry_N = []
+        # entry_aniso = []
+        # entry_slope = []
+        # for i in range(3):
+        #     entry_start.append(Entry(container))
+        #     entry_start[i].grid(row=2, column=i+1)
+        #     entry_start[i].insert(0, str(self.start[i]))
+        # for i in range(3):
+        #     entry_end.append(Entry(container))
+        #     entry_end[i].grid(row=3, column=i+1)
+        #     entry_end[i].insert(0, str(self.end[i]))
+        # for i in range(3):
+        #     entry_N.append(Entry(container))
+        #     entry_N[i].grid(row=4, column=i+1)
+        #     entry_N[i].insert(0, str(self.N[i]))
+        # for i in range(3):
+        #     entry_aniso.append(Entry(container))
+        #     entry_aniso[i].grid(row=5, column=i+1)
+        #     entry_aniso[i].insert(0, str(self.aniso[i]))
+        # for i in range(2):
+        #     entry_slope.append(Entry(container))
+        #     entry_slope[i].grid(row=6, column=i+1)
+        #     entry_slope[i].insert(0, str(self.slope[i]))
+        # btn = Button(
+        #     container,
+        #     text='UPDATE',
+        #     command=lambda: self.Button_click(
+        #         entry_start,
+        #         entry_end,
+        #         entry_N,
+        #         entry_aniso,
+        #         entry_slope)
+        #     ).grid(column=2)
+        # root.mainloop()
         # assign additional attributes
         self.tensor = 1.0/self.aniso
         self.dl = (self.end - self.start)/self.N
@@ -202,51 +205,49 @@ class Grid:
             [self.X.flatten(), self.Y.flatten(), self.Z.flatten()]).T
         self.values = zeros(self.N.prod(), float)                 # placeholder
 
-    def Button_click(self, entry_start, entry_end, entry_N, entry_aniso, entry_slope):  # NOQA
-        self.start = array([
-            float(entry_start[0].get()),
-            float(entry_start[1].get()),
-            float(entry_start[2].get())
-        ])
-        self.end = array([
-            float(entry_end[0].get()),
-            float(entry_end[1].get()),
-            float(entry_end[2].get())
-        ])
-        self.N = array([
-            int(entry_N[0].get()),
-            int(entry_N[1].get()),
-            int(entry_N[2].get())
-        ])
-        self.aniso = array([
-            float(entry_aniso[0].get()),
-            float(entry_aniso[1].get()),
-            float(entry_aniso[2].get())
-        ])
-        self.slope = array([
-            float(entry_slope[0].get()),
-            float(entry_slope[1].get())
-        ])
-        self.WriteParams()
+    # def Button_click(self, entry_start, entry_end, entry_N, entry_aniso, entry_slope):  # NOQA
+    #     self.start = array([
+    #         float(entry_start[0].get()),
+    #         float(entry_start[1].get()),
+    #         float(entry_start[2].get())
+    #     ])
+    #     self.end = array([
+    #         float(entry_end[0].get()),
+    #         float(entry_end[1].get()),
+    #         float(entry_end[2].get())
+    #     ])
+    #     self.N = array([
+    #         int(entry_N[0].get()),
+    #         int(entry_N[1].get()),
+    #         int(entry_N[2].get())
+    #     ])
+    #     self.aniso = array([
+    #         float(entry_aniso[0].get()),
+    #         float(entry_aniso[1].get()),
+    #         float(entry_aniso[2].get())
+    #     ])
+    #     self.slope = array([
+    #         float(entry_slope[0].get()),
+    #         float(entry_slope[1].get())
+    #     ])
+    #     self.WriteParams()
 
-    def WriteParams(self):
-        # write present value set to text file
-        output_file = open('domain.txt', 'w')
-        output_file.writelines(['\t', 'X', '\t', 'Y', '\t', 'Z', '\n'])
-        output_file.writelines(['start', '\t', str(self.start[0]), '\t', str(self.start[1]), '\t', str(self.start[2]), '\n'])  # NOQA
-        output_file.writelines(['end', '\t', str(self.end[0]), '\t', str(self.end[1]), '\t', str(self.end[2]), '\n'])  # NOQA
-        output_file.writelines(['N', '\t', str(self.N[0]), '\t', str(self.N[1]), '\t', str(self.N[2]), '\n'])  # NOQA
-        output_file.writelines(['anisotrophy_(0-1)', '\t', str(self.aniso[0]), '\t', str(self.aniso[1]), '\t', str(self.aniso[2]), '\n'])  # NOQA
-        output_file.writelines(['slope', '\t', str(self.slope[0]), '\t', str(self.slope[1]), '\n'])  # NOQA
-        output_file.close()
+    # def WriteParams(self):
+    #     # write present value set to text file
+    #     output_file = open('domain.txt', 'w')
+    #     output_file.writelines(['\t', 'X', '\t', 'Y', '\t', 'Z', '\n'])
+    #     output_file.writelines(['start', '\t', str(self.start[0]), '\t', str(self.start[1]), '\t', str(self.start[2]), '\n'])  # NOQA
+    #     output_file.writelines(['end', '\t', str(self.end[0]), '\t', str(self.end[1]), '\t', str(self.end[2]), '\n'])  # NOQA
+    #     output_file.writelines(['N', '\t', str(self.N[0]), '\t', str(self.N[1]), '\t', str(self.N[2]), '\n'])  # NOQA
+    #     output_file.writelines(['anisotrophy_(0-1)', '\t', str(self.aniso[0]), '\t', str(self.aniso[1]), '\t', str(self.aniso[2]), '\n'])  # NOQA
+    #     output_file.writelines(['slope', '\t', str(self.slope[0]), '\t', str(self.slope[1]), '\n'])  # NOQA
+    #     output_file.close()
 
     def ApplySlope(self):
         """ alter grid by applying slope vector to z-values
         (done post-interpolation to avoid problems with anisotropy, etc.)
         """
-        self.Z += (
-            self.X - self.start[0])*self.slope[0] +
-        (self.Y - self.start[1])*self.slope[1]
+        self.Z += (self.X - self.start[0])*self.slope[0] + (self.Y - self.start[1])*self.slope[1]  # NOQA
         self.grid = array([
             self.X.flatten(),
             self.Y.flatten(),
@@ -327,7 +328,7 @@ def WriteOutput(points, values, file_name, header_flag=1):
     if header_flag:
         line_out = ['x', '\t', 'y', '\t', 'z', '\t', 'value', '\n']
         output_file.writelines(line_out)
-    for i in xrange(len(values)):
+    for i in range(len(values)):
         line_out = []
         line_out.append(str(points[i, 0]))
         line_out.append('\t')
@@ -376,7 +377,7 @@ def ReadSeeds(params, grid):
             values.append(v)
         i += 1
     # add additional seed points
-    for i in xrange(params.num_extra_seeds):
+    for i in range(params.num_extra_seeds):
         x = random.uniform(grid.start[0], grid.end[0])
         y = random.uniform(grid.start[1], grid.end[1])
         z = random.uniform(grid.start[2], grid.end[2])
@@ -407,9 +408,9 @@ def SetStats(v, grid, params):
     column_labels = ['Points', 'Grid']
     row_labels = ['Mean', 'Std. dev.', 'Minimum', 'Maximum']
     sets = [v, grid.values]
-    for i in xrange(4):
+    for i in range(4):
         Label(container, text=row_labels[i]).grid(row=i+2, sticky=W)
-    for i in xrange(2):
+    for i in range(2):
         Label(container, text=column_labels[i]).grid(row=1, column=i+1, sticky=W)  # NOQA
         Label(container, text=str(sets[i].std())).grid(row=3, column=i+1, sticky=W)  # NOQA
         Label(container, text=str(sets[i].min())).grid(row=4, column=i+1, sticky=W)  # NOQA
@@ -496,8 +497,8 @@ def Points():
     print('Read grid settings.')
 
     # read seed points, if used
-    pts, v = ReadSeeds(params, grid)    
-    tree = KDTree(pts)
+    pts, v = ReadSeeds(params, grid)
+    tree = KDTree(pts)  
     print('Read and supplemented seed points.')
 
     # populate point set by bootstrapping
@@ -553,7 +554,7 @@ def Points():
     grid.InterpGrid(pts, v)
 
     # summarize set statistics and stretch grid histogram, if requested
-    grid = SetStats(v, grid, params)
+    # grid = SetStats(v, grid, params)
 
     # process output
     # alter z-values, post-interpolation, to account for slope
@@ -574,4 +575,4 @@ def Points():
 #
 ########################################################
 
-Points()
+# Points()
