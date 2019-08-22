@@ -1,0 +1,6 @@
+name: sfm
+channels:
+  - conda-forge
+  - defaults
+prefix: /anaconda3/envs/sfm
+
