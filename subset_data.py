@@ -13,7 +13,7 @@ def create_profile(x, bins=None):
 
     """
     counts, bin_edges = np.histogram(x, bins=bins)
-    return np.mean(counts)
+    return mean(counts)
 
 
 # Load the file
@@ -36,19 +36,21 @@ XYZ.Z = XYZ.Z/100
 
 #  Here is where we "make" subplots
 
-dxy = 5.  # 2 meter bins in X and Y directions
-dz = 0.5  # 0.5 meter bins in vertical.
+dxy = 1.  # 2 meter bins in X and Y directions
+dz = 0.25  # 0.5 meter bins in vertical.
 
 XYZ['Xbin'] = bin_points(XYZ.X, dxy)
 XYZ['Ybin'] = bin_points(XYZ.Y, dxy)
 XYZ['Zbin'] = bin_points(XYZ.Z, dz)
 
+counts_by_subplot = XYZ.groupby(['Xbin', 'Ybin', 'Zbin'])['Z'].count()
+
 # Groupby is the magic.
 max_height = XYZ.groupby(['Xbin', 'Ybin'])['Z'].max()
 n_points = XYZ.groupby(['Xbin', 'Ybin'])['Z'].count()
 
-
 groups = XYZ.groupby(['Xbin', 'Ybin'])['Z', 'Zbin']
+
 
 # Make profiles for each subplot
 z_bins = np.arange(0, np.ceil(np.max(XYZ.Z)), dz) + dz
