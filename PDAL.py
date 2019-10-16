@@ -35,17 +35,6 @@ class PDAL():
         # array of points, with x, y values:
         if points:
             self.points = points
-
-    def set_boundary(self, points):
-        """ Creates a boundary around a point cloud based on an array of [x,y] pairs. 
-        
-            It does not matter which point begins the array, so long as the order of 
-            points proceeds in a clockwise direction from the first point.
-
-            points = [[x1, y1], [x2, y2], ... [xn, yn]]
-
-         """
-        self.points = list(points)
     
     # Helper functions to generate properly formated strings that we will put into the PDAL file.
     @classmethod
