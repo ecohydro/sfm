@@ -77,10 +77,20 @@ The PDAL class has a suite of functions that assist in working with PDAL calcula
 
 * `PDAL.rotation_angle(points)`: Determines the necessary rotation angle, given a list of bounding coordinates.
 
-* `PDAL.transformation_matrix(points)`: Generates the appropriate transformation matrix necessary to rotate a set of points into an orthogonal coordinate system.
+* `PDAL.rotation_matrix(points)`: Generates the appropriate transformation matrix necessary to rotate a set of points into an orthogonal coordinate system.
 
-* `PDAL.translation_matrix(points)`: Generates the translation matrix necessary to re-center a transformed matrix so that the lower left corner of the point cloud is at the origin (0,0)
+* `PDAL.translation_matrix(points)`: Generates the transformation matrix necessary to re-center a transformed matrix so that the lower left corner of the point cloud is at the origin (0,0)
 
-* `PDAL.transform_point(point, matrix)`: Re-projects a single point according to a specified transformation matrix (use `PDAL.transformation_matrix()` to generate this `matrix`)
+* `PDAL.transform_point(point, matrix)`: Re-projects a single point according to a specified transformation matrix (use `PDAL.rotation_matrix()` or `PDAL.translation_matrix()` to generate this `matrix`)
+
+TODOS:
+
+1. Probably could combine the `rotation` and `translation` matrixes into a single `transformation` matrix within `PDAL`. A  these transformations are linear, so they do not need to be in separate matricies.
+
+1. We need a test `.csv` file with all the points so we can start benchmarking the speed of our affine transformations in PDAL vs. python. 
+
+1. We should explore the implementation of the ground-finding algorithm in PDAL and see if we can build it here in python.
+
+
 
 

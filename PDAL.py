@@ -115,9 +115,9 @@ class PDAL():
         ...   [262888.9, 53148.19],   # upper right corner of crop area 
         ... ]
 
-        >>> t_mat = PDAL.transformation_matrix(points)
+        >>> r_mat = PDAL.rotation_matrix(points)
 
-        >>> PDAL.make_matrix(matrix=t_mat)
+        >>> PDAL.make_matrix(matrix=r_mat)
         '0.18668087950923754 0.9824206070852024 0 0 -0.9824206070852024 0.18668087950923754 0 0 0 0 1 0 0 0 0 1'
         
         """
@@ -128,8 +128,8 @@ class PDAL():
             return 'None'
 
     @classmethod
-    def transformation_matrix(cls, points):
-        """ Creates a transformation matrix using an angle, in radians 
+    def rotation_matrix(cls, points):
+        """ Creates a rotation matrix using an angle, in radians 
         
             The rotation matrix rotates about the origin.
 
@@ -140,7 +140,7 @@ class PDAL():
         ...   [262888.9, 53148.19],   # upper right corner of crop area 
         ... ]
 
-        >>> PDAL.transformation_matrix(points)
+        >>> PDAL.rotation_matrix(points)
         [[0.18668087950923754, 0.9824206070852024, 0, 0], [-0.9824206070852024, 0.18668087950923754, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
         """
         from math import cos, sin
@@ -204,7 +204,7 @@ class PDAL():
         # corner (ll_point), we end up with that point exactly at the origin [0.0, 0.0]
 
         >>> ll_point = PDAL.lower_left(points)
-        >>> rotation_matrix = PDAL.transformation_matrix(points)
+        >>> rotation_matrix = PDAL.rotation_matrix(points)
         >>> translation_matrix = PDAL.translation_matrix(points)
         >>> PDAL.transform_point(
         ...     PDAL.transform_point(ll_point,rotation_matrix),
@@ -212,8 +212,8 @@ class PDAL():
         [0.0, 0.0]
         """
         ll_point = cls.lower_left(points)
-        t_mat = cls.transformation_matrix(points)
-        [x_shift, y_shift] = cls.transform_point(ll_point, t_mat)
+        r_mat = cls.rotation_matrix(points)
+        [x_shift, y_shift] = cls.transform_point(ll_point, r_mat)
         return [
             [1, 0, 0, -x_shift],
             [0, 1, 0, -y_shift],
@@ -258,7 +258,7 @@ class PDAL():
             },
             "matrix":{
                 "transformation": self.make_matrix(
-                    matrix=self.transformation_matrix(points)
+                    matrix=self.rotation_matrix(points)
                 ),
                 "translation": self.make_matrix(matrix=self.translation_matrix(points))
             }
