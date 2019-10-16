@@ -1,22 +1,6 @@
 # File to generate PDAL configuration for a sfm point cloud
 from jinja2 import Template, Environment, FileSystemLoader
 import numpy as np 
-
-points = [
-    [262986.2, 53128.25],   # lower right corner of crop area
-    [262967.5, 53029.84],   # lower left corner of crop area  
-    [262870.1, 53048.72],   # upper left corner of crop area
-    [262888.9, 53148.19],   # upper right corner of crop area 
-]
-
-# The translation matrix must be defined according to this:
-translation_matrix = [
-    [1, 0, 0, -98173.73],
-    [0, 1, 0, 233065.4],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1]
-]
-
 class PDAL():
     """ Creates a PDAL object for use in PDAL configuration """
     def __init__(self,
