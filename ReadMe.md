@@ -91,6 +91,8 @@ TODOS:
 
 1. We should explore the implementation of the ground-finding algorithm in PDAL and see if we can build it here in python.
 
+1. Is github working in slack?
+
 
 
 
