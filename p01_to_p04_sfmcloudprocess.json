@@ -50,7 +50,7 @@
             	{
     		"type":"filters.transformation",
     		"matrix":"1 0 0 -98173.73 0 1 0 233065.4 0 0 1 0 0 0 0 1"
-    	},
+    	}
     	]
 }
 	

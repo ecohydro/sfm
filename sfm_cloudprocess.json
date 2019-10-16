@@ -1,0 +1,57 @@
+{
+	"pipeline":[
+	{
+		"type":"filters.assign",
+		"assignment":"NumberOfReturns[0:0]=1"
+	},
+	{
+		"type":"filters.assign",
+		"assignment":"ReturnNumber[0:0]=1"
+	},
+	{
+      		"type":"filters.assign",
+      		"assignment":"Classification[:]=0"
+    	},
+	{
+      		"type":"filters.elm",
+		"cell":25.0,
+		"threshold":0.5
+    	},
+    	{
+      		"type":"filters.outlier"
+    	},
+    	{
+      		"type":"filters.smrf",
+      		"ignore":"Classification[7:7]",
+      		"cell":1.0,
+		"slope": 0.08,
+      		"window": 15,
+      		"threshold": 0.05,
+      		"scalar": 1.5
+    	},
+	{
+		"type":"filters.hag"
+	},
+	{
+		"type":"filters.ferry",
+		"dimensions":"HeightAboveGround=Z"
+	},
+	{	"type":"filters.range",
+		"limits":"Classification[1:1]"
+	},
+        	{
+    		"type":"filters.crop",
+    		"polygon":"POLYGON((262986.2 53128.25, 262967.5 53029.84, 262870.1 53048.72, 262888.9 53148.19, 262986.2 53128.25))"
+    	},
+            	{
+    		"type":"filters.transformation",
+    		"matrix":"0.18668087950923754 -0.9824206070852024 0 0 0.9824206070852024 0.18668087950923754 0 0 0 0 1 0 0 0 0 1"
+    	}
+            	,
+		{
+    		"type":"filters.transformation",
+    		"matrix":"None"
+    	}
+    	]
+}
+	

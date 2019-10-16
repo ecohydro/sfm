@@ -49,13 +49,14 @@
     	{
     		"type":"filters.transformation",
     		"matrix":"{{ matrix.transformation }}"
-    	},
+    	}
     {% endif %}
     {% if matrix.translation is defined %}
-    	{
+    	,
+		{
     		"type":"filters.transformation",
     		"matrix":"{{ matrix.translation }}"
-    	},
+    	}
     {% endif %}
 	]
 }
