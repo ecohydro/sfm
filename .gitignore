@@ -3,7 +3,7 @@
 instructor_notes.md
 __pycache__/
 chapters/Chapter 4.ipynb
-
+dask-*/
 *.las
 *.xyz
 *.csv
