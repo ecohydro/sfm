@@ -128,7 +128,7 @@ class PDAL():
             return 'None'
 
     @classmethod
-    def rotation_matrix(cls, points):
+    def rotation_matrix(cls, points, dim=3):
         """ Creates a rotation matrix using an angle, in radians 
         
             The rotation matrix rotates about the origin.
@@ -145,15 +145,22 @@ class PDAL():
         """
         from math import cos, sin
         angle = cls.rotation_angle(points)
-        return [ 
-            [cos(angle), sin(angle), 0, 0], # NOQA
-            [-sin(angle), cos(angle), 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        ]
+        if dim==2:
+            return [ 
+                [cos(angle), sin(angle), 0],
+                [-sin(angle), cos(angle), 0],
+                [0, 0, 1]
+            ]
+        else:
+            return [ 
+                [cos(angle), sin(angle), 0, 0], # NOQA
+                [-sin(angle), cos(angle), 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+            ]
 
     @classmethod
-    def transform_point(cls, point, M):
+    def transform_point(cls, point, M, dim=3):
         """ Transform a single point using a transformation matrix 
         
         >>> from math import cos, sin, pi
@@ -178,11 +185,15 @@ class PDAL():
 
         """
         P = list(point)
-        P.extend([1, 1])
+        if dim==2:
+            P.extend([1])
+        else:
+            P.extend([1, 1])
+
         return list(np.matmul(M,P))[0:2]
 
     @classmethod
-    def translation_matrix(cls, points):
+    def translation_matrix(cls, points, dim=3):
         """ Generates a translation matrix for a set of points.
 
         This calculation is done "post-rotation", so that the translation
@@ -214,12 +225,19 @@ class PDAL():
         ll_point = cls.lower_left(points)
         r_mat = cls.rotation_matrix(points)
         [x_shift, y_shift] = cls.transform_point(ll_point, r_mat)
-        return [
-            [1, 0, 0, -x_shift],
-            [0, 1, 0, -y_shift],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        ]
+        if dim==2:
+            return [
+                [1, 0, -x_shift],
+                [0, 1, -y_shift],
+                [0, 0, 1]
+            ]
+        else:
+            return [
+                [1, 0, 0, -x_shift],
+                [0, 1, 0, -y_shift],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+            ]
 
     def make_pdal_params(self):
         """
